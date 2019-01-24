@@ -42,8 +42,10 @@ General board control
     pyb.freq(60000000) # set CPU freq to 60MHz
     pyb.stop() # stop CPU, waiting for external interrupt
 
-Delay and timing::
-    hello world
+Delay and timing ::
+
+    import abc
+    pyb.aaa=111
 ----------------
 
 Use the :mod:`time <utime>` module::
