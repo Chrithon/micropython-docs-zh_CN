@@ -31,7 +31,6 @@ this board please consider reading the following sections first:
 
 General board control
 ---------------------
-:: import 123
 看 :mod:`pyb`. ::
 
     import pyb
