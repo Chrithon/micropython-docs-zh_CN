@@ -31,7 +31,7 @@ this board please consider reading the following sections first:
 
 General board control
 ---------------------
-
+:: import 123
 看 :mod:`pyb`. ::
 
     import pyb
@@ -42,10 +42,7 @@ General board control
     pyb.freq(60000000) # set CPU freq to 60MHz
     pyb.stop() # stop CPU, waiting for external interrupt
 
-Delay and timing ::
-
-    import abc
-    pyb.aaa=111
+Delay and timing 
 ----------------
 
 Use the :mod:`time <utime>` module::
