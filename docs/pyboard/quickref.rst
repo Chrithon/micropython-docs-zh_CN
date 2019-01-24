@@ -1,6 +1,6 @@
 .. _pyboard_quickref:
 
-Quick reference for the pyboard
+pyboard 快速参考手册
 ===============================
 
 The below pinout is for PYBv1.0.  You can also view pinouts for
