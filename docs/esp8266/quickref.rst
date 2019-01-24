@@ -1,6 +1,6 @@
 .. _esp8266_quickref:
 
-Quick reference for the ESP8266
+ESP8266 快速参考手册
 ===============================
 
 .. image:: img/adafruit_products_pinoutstop.jpg
