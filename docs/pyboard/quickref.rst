@@ -29,32 +29,32 @@ this board please consider reading the following sections first:
    general.rst
    tutorial/index.rst
 
-General board control 通用控制
+通用控制
 ---------------------
 看 :mod:`pyb`. ::
 
     import pyb
 
-    pyb.repl_uart(pyb.UART(1, 9600)) # duplicate REPL on UART(1)
-    pyb.wfi() # pause CPU, waiting for interrupt
-    pyb.freq() # get CPU and bus frequencies
-    pyb.freq(60000000) # set CPU freq to 60MHz
-    pyb.stop() # stop CPU, waiting for external interrupt
+    pyb.repl_uart(pyb.UART(1, 9600)) # 复制 REPL 到 UART(1)
+    pyb.wfi() # 暂停 CPU，等待中断
+    pyb.freq() # 获取 CPU 和总线的频率
+    pyb.freq(60000000) # 设置 CPU 工作频率为 60MHz
+    pyb.stop() # 暂停 CPU, 等待外部中断
 
-Delay and timing 延时和计时器
+延时和计时器
 ----------------
 
-Use the :mod:`time <utime>` module::
+使用 :mod:`time <utime>` 模块::
 
     import time
 
-    time.sleep(1)           # sleep for 1 second
-    time.sleep_ms(500)      # sleep for 500 milliseconds
-    time.sleep_us(10)       # sleep for 10 microseconds
-    start = time.ticks_ms() # get value of millisecond counter
-    delta = time.ticks_diff(time.ticks_ms(), start) # compute time difference
+    time.sleep(1)           # 睡眠1s
+    time.sleep_ms(500)      # 睡眠500ms
+    time.sleep_us(10)       # 睡眠10ms
+    start = time.ticks_ms() # 获取毫秒计数器的值
+    delta = time.ticks_diff(time.ticks_ms(), start) # 计算启动时间
 
-Internal LEDs 板载LED
+板载LEDs
 -------------
 
 See :ref:`pyb.LED <pyb.LED>`. ::
@@ -70,7 +70,7 @@ See :ref:`pyb.LED <pyb.LED>`. ::
     LED(4).intensity()    # get intensity
     LED(4).intensity(128) # set intensity to half
 
-Internal switch 板载按键
+板载按键
 ---------------
 
 See :ref:`pyb.Switch <pyb.Switch>`. ::
@@ -81,7 +81,7 @@ See :ref:`pyb.Switch <pyb.Switch>`. ::
     sw.value() # returns True or False
     sw.callback(lambda: pyb.LED(1).toggle())
 
-Pins and GPIO 口
+引脚和GPIO口
 -------------
 
 See :ref:`pyb.Pin <pyb.Pin>`. ::
@@ -95,7 +95,7 @@ See :ref:`pyb.Pin <pyb.Pin>`. ::
     p_in = Pin('X2', Pin.IN, Pin.PULL_UP)
     p_in.value() # get value, 0 or 1
 
-Servo control 伺服电机控制
+伺服电机控制
 -------------
 
 See :ref:`pyb.Servo <pyb.Servo>`. ::
@@ -107,7 +107,7 @@ See :ref:`pyb.Servo <pyb.Servo>`. ::
     s1.angle(-60, 1500) # move to -60 degrees in 1500ms
     s1.speed(50) # for continuous rotation servos
 
-External interrupts 外部中断
+外部中断
 -------------------
 
 See :ref:`pyb.ExtInt <pyb.ExtInt>`. ::
@@ -117,7 +117,7 @@ See :ref:`pyb.ExtInt <pyb.ExtInt>`. ::
     callback = lambda e: print("intr")
     ext = ExtInt(Pin('Y1'), ExtInt.IRQ_RISING, Pin.PULL_NONE, callback)
 
-Timers 计时器
+计时器
 ------
 
 See :ref:`pyb.Timer <pyb.Timer>`. ::
@@ -129,7 +129,7 @@ See :ref:`pyb.Timer <pyb.Timer>`. ::
     tim.freq(0.5) # 0.5 Hz
     tim.callback(lambda t: pyb.LED(1).toggle())
 
-RTC (real time clock) 实时时钟
+实时时钟
 ---------------------
 
 See :ref:`pyb.RTC <pyb.RTC>` ::
@@ -140,7 +140,7 @@ See :ref:`pyb.RTC <pyb.RTC>` ::
     rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # set a specific date and time
     rtc.datetime() # get date and time
 
-PWM (pulse width modulation) 脉宽调变
+PWM (脉宽调变) 
 ----------------------------
 
 See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.Timer <pyb.Timer>`. ::
@@ -152,7 +152,7 @@ See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.Timer <pyb.Timer>`. ::
     ch = tim.channel(1, Timer.PWM, pin=p)
     ch.pulse_width_percent(50)
 
-ADC (analog to digital conversion) AD转换
+ADC (模数转换) 
 ----------------------------------
 
 See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.ADC <pyb.ADC>`. ::
@@ -162,7 +162,7 @@ See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.ADC <pyb.ADC>`. ::
     adc = ADC(Pin('X19'))
     adc.read() # read value, 0-4095
 
-DAC (digital to analog conversion) DA转换
+DAC (数模转换) 
 ----------------------------------
 
 See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.DAC <pyb.DAC>`. ::
@@ -172,7 +172,7 @@ See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.DAC <pyb.DAC>`. ::
     dac = DAC(Pin('X5'))
     dac.write(120) # output between 0 and 255
 
-UART (serial bus) 串口
+UART(串行总线) 
 -----------------
 
 See :ref:`pyb.UART <pyb.UART>`. ::
@@ -183,7 +183,7 @@ See :ref:`pyb.UART <pyb.UART>`. ::
     uart.write('hello')
     uart.read(5) # read up to 5 bytes
 
-SPI bus SPI总线
+SPI总线
 -------
 
 See :ref:`pyb.SPI <pyb.SPI>`. ::
@@ -195,7 +195,7 @@ See :ref:`pyb.SPI <pyb.SPI>`. ::
     spi.recv(5) # receive 5 bytes on the bus
     spi.send_recv('hello') # send and receive 5 bytes
 
-I2C bus I2C总线
+I2C总线
 -------
 
 See :ref:`pyb.I2C <pyb.I2C>`. ::
@@ -209,7 +209,7 @@ See :ref:`pyb.I2C <pyb.I2C>`. ::
     i2c.mem_read(2, 0x42, 0x10) # read 2 bytes from slave 0x42, slave memory 0x10
     i2c.mem_write('xy', 0x42, 0x10) # write 2 bytes to slave 0x42, slave memory 0x10
 
-CAN bus (controller area network) CAN总线
+CAN总线 (controller area network)
 ---------------------------------
 
 See :ref:`pyb.CAN <pyb.CAN>`. ::
@@ -221,7 +221,7 @@ See :ref:`pyb.CAN <pyb.CAN>`. ::
     can.send('message!', 123)   # send a message with id 123
     can.recv(0)                 # receive message on FIFO 0
 
-Internal accelerometer 板载加速度传感器
+板载三轴加速度传感器
 ----------------------
 
 See :ref:`pyb.Accel <pyb.Accel>`. ::
