@@ -1,6 +1,7 @@
 .. _pyboard_general:
 
-pyboard 的基本资料
+
+General information about the pyboard（pyb的基本资料说明）
 =====================================
 
 .. contents::
