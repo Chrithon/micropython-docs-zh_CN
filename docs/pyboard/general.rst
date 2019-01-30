@@ -1,6 +1,6 @@
 .. _pyboard_general:
 
-General information about the pyboard
+pyboard 的基本资料
 =====================================
 
 .. contents::
@@ -11,11 +11,14 @@ Local filesystem and SD card
 There is a small internal filesystem (a drive) on the pyboard, called ``/flash``,
 which is stored within the microcontroller's flash memory.  If a micro SD card
 is inserted into the slot, it is available as ``/sd``.
+pyboard的内部有一个很小的文件系统（驱动器），叫做``/flash``，它使用单片机自带的flash来存储。
+如果将microSD卡插入卡槽，则可以使用``/sd``的文件系统。
 
 When the pyboard boots up, it needs to choose a filesystem to boot from.  If
 there is no SD card, then it uses the internal filesystem ``/flash`` as the boot
 filesystem, otherwise, it uses the SD card ``/sd``. After the boot, the current
 directory is set to one of the directories above.
+
 
 If needed, you can prevent the use of the SD card by creating an empty file
 called ``/flash/SKIPSD``.  If this file exists when the pyboard boots
