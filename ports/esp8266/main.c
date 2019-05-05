@@ -77,16 +77,16 @@ STATIC void mp_reset(void) {
 
     #if MICROPY_MODULE_FROZEN
     pyexec_frozen_module("_boot.py");
-    pyexec_file("boot.py");
+    pyexec_file_if_exists("boot.py");
     if (pyexec_mode_kind == PYEXEC_MODE_FRIENDLY_REPL) {
-        pyexec_file("main.py");
+        pyexec_file_if_exists("main.py");
     }
     #endif
 }
 
 void soft_reset(void) {
     gc_sweep_all();
-    mp_hal_stdout_tx_str("PYB: soft reboot\r\n");
+    mp_hal_stdout_tx_str("MPY: soft reboot\r\n");
     mp_hal_delay_us(10000); // allow UART to flush output
     mp_reset();
     #if MICROPY_REPL_EVENT_DRIVEN
