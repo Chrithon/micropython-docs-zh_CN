@@ -1,6 +1,6 @@
 .. _esp32_quickref:
 
-Quick reference for the ESP32
+ESP32 快速参考手册
 =============================
 
 .. image:: img/esp32.jpg
