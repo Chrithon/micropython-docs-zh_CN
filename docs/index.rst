@@ -5,7 +5,7 @@ MicroPython documentation and references
 
     library/index.rst
     reference/index.rst
-    genrst/index.rst
+    difference/index_template.txt
     develop/index.rst
     license.rst
     pyboard/quickref.rst
