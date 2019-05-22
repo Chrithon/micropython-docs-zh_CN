@@ -1,4 +1,4 @@
-MicroPython的开发和构建
+MicroPython 开发和构建
 ===================================
 
 This chapter describes some options for extending MicroPython in C. Note
