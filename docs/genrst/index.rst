@@ -2,7 +2,7 @@
 
 .. _cpython_diffs:
 
-MicroPython differences from CPython
+MicroPython与CPython的区别
 ====================================
 
 The operations listed in this section produce conflicting results in MicroPython when compared to standard Python.
