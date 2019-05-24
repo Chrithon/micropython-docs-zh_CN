@@ -3,25 +3,20 @@
 pyboard 快速参考手册
 ===============================
 
-The below pinout is for PYBv1.1.  You can also view pinouts for
-other versions of the pyboard:
-`PYBv1.0 <http://micropython.org/resources/pybv10-pinout.jpg>`__
-or `PYBLITEv1.0-AC <http://micropython.org/resources/pyblitev10ac-pinout.jpg>`__
-or `PYBLITEv1.0 <http://micropython.org/resources/pyblitev10-pinout.jpg>`__.
+The below pinout is for PYBv1.1-CN.  
 
 .. only:: not latex
 
-   .. image:: http://micropython.org/resources/pybv11-pinout.jpg
+   .. image:: http://www.01studio.org/micropython/picture/pyboard_v1.1-CN_pinout.png
       :alt: PYBv1.1 pinout
       :width: 700px
 
 .. only:: latex
 
-   .. image:: http://micropython.org/resources/pybv11-pinout-800px.jpg
+   .. image:: http://www.01studio.org/micropython/picture/pyboard_v1.1-CN_pinout.png
       :alt: PYBv1.1 pinout
 
-Below is a quick reference for the pyboard.  If it is your first time working with
-this board please consider reading the following sections first:
+以下是快速参考内容，如果你是第一次使用pyboard，请考虑先阅读以下章节内容：
 
 .. toctree::
    :maxdepth: 1
