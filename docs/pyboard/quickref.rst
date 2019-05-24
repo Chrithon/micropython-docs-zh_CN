@@ -3,7 +3,7 @@
 pyboard 快速参考手册
 ===============================
 
-The below pinout is for PYBv1.1-CN.  
+以下是PYBv1.1-CN引脚图：
 
 .. only:: not latex
 
