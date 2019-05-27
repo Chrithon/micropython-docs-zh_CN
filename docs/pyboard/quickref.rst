@@ -193,27 +193,25 @@ See :ref:`pyb.SPI <pyb.SPI>`. ::
 I2C总线
 -------
 
-Hardware I2C is available on the X and Y halves of the pyboard via ``I2C('X')``
-and ``I2C('Y')``.  Alternatively pass in the integer identifier of the peripheral,
-eg ``I2C(1)``.  Software I2C is also available by explicitly specifying the
-``scl`` and ``sda`` pins instead of the bus name.  For more details see
-:ref:`machine.I2C <machine.I2C>`. ::
+硬件I2C可以直接通过X和Y半部分接口直接定义成 ``I2C('X')``和 ``I2C('Y')``，此时使用默认的I2C接口。
+另外也可以直接使用标识符，例如 ``I2C(1)``。  软件I2C可以通过 ``scl`` 和 ``sda`` 结合引脚来自定义。
+更多详细信息请看 :ref:`machine.I2C <machine.I2C>`. ::
 
     from machine import I2C
 
-    i2c = I2C('X', freq=400000)                 # create hardware I2c object
-    i2c = I2C(scl='X1', sda='X2', freq=100000)  # create software I2C object
+    i2c = I2C('X', freq=400000)                 # 定义硬件I2C对象
+    i2c = I2C(scl='X1', sda='X2', freq=100000)  # 定义软件I2C对象
 
-    i2c.scan()                          # returns list of slave addresses
-    i2c.writeto(0x42, 'hello')          # write 5 bytes to slave with address 0x42
-    i2c.readfrom(0x42, 5)               # read 5 bytes from slave
+    i2c.scan()                          # 返回扫描到的从机地址
+    i2c.writeto(0x42, 'hello')          # 往地址为 0x42 的从机写5个字节
+    i2c.readfrom(0x42, 5)               # 从地址为 0x42 的从机读取5个字节
 
-    i2c.readfrom_mem(0x42, 0x10, 2)     # read 2 bytes from slave 0x42, slave memory 0x10
-    i2c.writeto_mem(0x42, 0x10, 'xy')   # write 2 bytes to slave 0x42, slave memory 0x10
+    i2c.readfrom_mem(0x42, 0x10, 2)     # 从设备地址 0x42和存储器地址为0x10中读取2个字节
+    i2c.writeto_mem(0x42, 0x10, 'xy')   # 从设备地址 0x42和存储器地址为0x10中写入2个字节
 
-Note: for legacy I2C support see :ref:`pyb.I2C <pyb.I2C>`.
+注意: 对于传统的I2C支持，请参阅 :ref:`pyb.I2C <pyb.I2C>`.
 
-CAN总线 (controller area network)
+CAN总线 (区域网络控制)
 ---------------------------------
 
 See :ref:`pyb.CAN <pyb.CAN>`. ::
@@ -222,8 +220,8 @@ See :ref:`pyb.CAN <pyb.CAN>`. ::
 
     can = CAN(1, CAN.LOOPBACK)
     can.setfilter(0, CAN.LIST16, 0, (123, 124, 125, 126))
-    can.send('message!', 123)   # send a message with id 123
-    can.recv(0)                 # receive message on FIFO 0
+    can.send('message!', 123)   # 发送ID为123的消息
+    can.recv(0)                 # 在 FIFO 0 上接收信息
 
 板载三轴加速度传感器
 ----------------------
