@@ -3,8 +3,7 @@ pyboard硬件
 
 pyboard:
 
-* v1.1
-    * `PYBv1.1-CN 原理图 <http://bbs.01studio.org/micropython/sch/pyBoard_v1.1-CN_Sch.pdf>`_ (PDF)
+* `PYBv1.1-CN 原理图 <http://bbs.01studio.org/micropython/sch/pyBoard_v1.1-CN_Sch.pdf>`_ (PDF)
 
 相关产品和模块:
 
