@@ -26,7 +26,7 @@ pyboard 快速参考手册
 
 通用控制
 ---------------------
-看 :mod:`pyb`. ::
+See :mod:`pyb`. ::
 
     import pyb
 
@@ -56,14 +56,14 @@ See :ref:`pyb.LED <pyb.LED>`. ::
 
     from pyb import LED
 
-    led = LED(1) # 1=red, 2=green, 3=yellow, 4=blue
+    led = LED(1) # 1=红, 2=绿, 3=黄, 4=蓝
     led.toggle()
     led.on()
     led.off()
     
-    # LEDs 3 and 4 support PWM intensity (0-255)
-    LED(4).intensity()    # get intensity
-    LED(4).intensity(128) # set intensity to half
+    # LEDs 3 和 4 支持 PWM 调节亮度 (0-255)
+    LED(4).intensity()    # 获取亮度值
+    LED(4).intensity(128) # 设置亮度值为一半
 
 板载按键
 ---------------
@@ -73,8 +73,8 @@ See :ref:`pyb.Switch <pyb.Switch>`. ::
     from pyb import Switch
 
     sw = Switch()
-    sw.value() # returns True or False
-    sw.callback(lambda: pyb.LED(1).toggle())
+    sw.value() # 返回 True 或者 False
+    sw.callback(lambda: pyb.LED(1).toggle()) #按键按下执行相关函数
 
 引脚和GPIO口
 -------------
@@ -88,19 +88,19 @@ See :ref:`pyb.Pin <pyb.Pin>`. ::
     p_out.low()
 
     p_in = Pin('X2', Pin.IN, Pin.PULL_UP)
-    p_in.value() # get value, 0 or 1
+    p_in.value() # 获取数值, 0 或者 1
 
-伺服电机控制
+舵机控制
 -------------
 
 See :ref:`pyb.Servo <pyb.Servo>`. ::
 
     from pyb import Servo
 
-    s1 = Servo(1) # servo on position 1 (X1, VIN, GND)
-    s1.angle(45) # move to 45 degrees
-    s1.angle(-60, 1500) # move to -60 degrees in 1500ms
-    s1.speed(50) # for continuous rotation servos
+    s1 = Servo(1) # 舵机连接到接口1 (X1, VIN, GND)
+    s1.angle(45) # 旋转到45°位置
+    s1.angle(-60, 1500) # 在1500毫秒内转到-60°的位置
+    s1.speed(50) # 适用于连续旋转舵机
 
 外部中断
 -------------------
@@ -120,7 +120,7 @@ See :ref:`pyb.Timer <pyb.Timer>`. ::
     from pyb import Timer
 
     tim = Timer(1, freq=1000)
-    tim.counter() # get counter value
+    tim.counter() # 获取计时器数值
     tim.freq(0.5) # 0.5 Hz
     tim.callback(lambda t: pyb.LED(1).toggle())
 
@@ -132,8 +132,8 @@ See :ref:`pyb.RTC <pyb.RTC>` ::
     from pyb import RTC
 
     rtc = RTC()
-    rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # set a specific date and time
-    rtc.datetime() # get date and time
+    rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # 设置日期和时间
+    rtc.datetime() # 获取日期和时间
 
 PWM (脉宽调变) 
 ----------------------------
@@ -155,7 +155,7 @@ See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.ADC <pyb.ADC>`. ::
     from pyb import Pin, ADC
 
     adc = ADC(Pin('X19'))
-    adc.read() # read value, 0-4095
+    adc.read() # 读取数值, 0-4095
 
 DAC (数模转换) 
 ----------------------------------
@@ -165,7 +165,7 @@ See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.DAC <pyb.DAC>`. ::
     from pyb import Pin, DAC
 
     dac = DAC(Pin('X5'))
-    dac.write(120) # output between 0 and 255
+    dac.write(120) # 输出数值 0 至 255
 
 UART(串行总线) 
 -----------------
@@ -176,7 +176,7 @@ See :ref:`pyb.UART <pyb.UART>`. ::
 
     uart = UART(1, 9600)
     uart.write('hello')
-    uart.read(5) # read up to 5 bytes
+    uart.read(5) # 读取 5 个字节
 
 SPI总线
 -------
@@ -187,8 +187,8 @@ See :ref:`pyb.SPI <pyb.SPI>`. ::
 
     spi = SPI(1, SPI.MASTER, baudrate=200000, polarity=1, phase=0)
     spi.send('hello')
-    spi.recv(5) # receive 5 bytes on the bus
-    spi.send_recv('hello') # send and receive 5 bytes
+    spi.recv(5) # 接收5个字节
+    spi.send_recv('hello') # 发送和接收5个字节
 
 I2C总线
 -------
@@ -233,4 +233,4 @@ See :ref:`pyb.Accel <pyb.Accel>`. ::
     from pyb import Accel
 
     accel = Accel()
-    print(accel.x(), accel.y(), accel.z(), accel.tilt())
+    print(accel.x(), accel.y(), accel.z(), accel.tilt()) #打印X,Y,Z值
