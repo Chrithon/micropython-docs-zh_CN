@@ -50,19 +50,19 @@ The :mod:`network` module::
 
     import network
 
-    wlan = network.WLAN(network.STA_IF) # create station interface
-    wlan.active(True)       # activate the interface
-    wlan.scan()             # scan for access points
-    wlan.isconnected()      # check if the station is connected to an AP
-    wlan.connect('essid', 'password') # connect to an AP
-    wlan.config('mac')      # get the interface's MAC adddress
-    wlan.ifconfig()         # get the interface's IP/netmask/gw/DNS addresses
+    wlan = network.WLAN(network.STA_IF) # 创建station接口
+    wlan.active(True)       # 激活接口
+    wlan.scan()             # 搜索允许的访问SSID
+    wlan.isconnected()      # 检查创建的station是否连接到AP
+    wlan.connect('essid', 'password') # 连接到指定ESSID网络
+    wlan.config('mac')      # 获取接口的MAC地址
+    wlan.ifconfig()         # 获取接口的 IP/netmask(子网掩码)/gw(网关)/DNS 地址
 
-    ap = network.WLAN(network.AP_IF) # create access-point interface
-    ap.active(True)         # activate the interface
-    ap.config(essid='ESP-AP') # set the ESSID of the access point
-
-A useful function for connecting to your local WiFi network is::
+    ap = network.WLAN(network.AP_IF) # 创捷一个AP热点接口
+    ap.active(True)         # 激活接口
+    ap.config(essid='ESP-AP') # 设置AP的ESSID名称
+    
+一个连接到你本地WIFI网络有用的函数::
 
     def do_connect():
         import network
@@ -75,8 +75,7 @@ A useful function for connecting to your local WiFi network is::
                 pass
         print('network config:', wlan.ifconfig())
 
-Once the network is established the :mod:`socket <usocket>` module can be used
-to create and use TCP/UDP sockets as usual.
+一旦网络建立成功，就可以通过 :mod:`socket <usocket>` 模块创捷和使用 TCP/UDP socket通讯。 
 
 延时和时间
 ----------------
@@ -85,43 +84,42 @@ Use the :mod:`time <utime>` module::
 
     import time
 
-    time.sleep(1)           # sleep for 1 second
-    time.sleep_ms(500)      # sleep for 500 milliseconds
-    time.sleep_us(10)       # sleep for 10 microseconds
-    start = time.ticks_ms() # get millisecond counter
-    delta = time.ticks_diff(time.ticks_ms(), start) # compute time difference
+    time.sleep(1)           # 睡眠1秒
+    time.sleep_ms(500)      # 睡眠500毫秒
+    time.sleep_us(10)       # 睡眠10微妙
+    start = time.ticks_ms() # 获取毫秒计时器开始值
+    delta = time.ticks_diff(time.ticks_ms(), start) # 计算从开始到当前时间的差值
 
 定时器
 ------
 
-Virtual (RTOS-based) timers are supported. Use the :ref:`machine.Timer <machine.Timer>` class
-with timer ID of -1::
+支持虚拟 (基于RTOS) 定时器。使用 :ref:`machine.Timer <machine.Timer>` 模块通过设置 timer ID 号为 -1::
 
     from machine import Timer
 
-    tim = Timer(-1)
-    tim.init(period=5000, mode=Timer.ONE_SHOT, callback=lambda t:print(1))
-    tim.init(period=2000, mode=Timer.PERIODIC, callback=lambda t:print(2))
+    tim = Timer(-1) 
+    tim.init(period=5000, mode=Timer.ONE_SHOT, callback=lambda t:print(1)) #1次
+    tim.init(period=2000, mode=Timer.PERIODIC, callback=lambda t:print(2)) #周期
 
-The period is in milliseconds.
+该周期的单位为毫秒(ms)。
 
 引脚和GPIO口
 -------------
 
-Use the :ref:`machine.Pin <machine.Pin>` class::
+使用 :ref:`machine.Pin <machine.Pin>` 模块::
 
     from machine import Pin
 
-    p0 = Pin(0, Pin.OUT)    # create output pin on GPIO0
-    p0.on()                 # set pin to "on" (high) level
-    p0.off()                # set pin to "off" (low) level
-    p0.value(1)             # set pin to on/high
+    p0 = Pin(0, Pin.OUT)    # 创建对象p0，对应GPIO0口输出
+    p0.on()                 # 设置引脚为 "on" (1)高电平 
+    p0.off()                # 设置引脚为 "off" (0)低电平
+    p0.value(1)             # 设置引脚为 "on" (1)高电平 
 
-    p2 = Pin(2, Pin.IN)     # create input pin on GPIO2
-    print(p2.value())       # get value, 0 or 1
+    p2 = Pin(2, Pin.IN)     # 创建对象p2，对应GPIO2口输入
+    print(p2.value())       # 获取引脚输入值, 0（低电平） or 1（高电平）
 
-    p4 = Pin(4, Pin.IN, Pin.PULL_UP) # enable internal pull-up resistor
-    p5 = Pin(5, Pin.OUT, value=1) # set pin high on creation
+    p4 = Pin(4, Pin.IN, Pin.PULL_UP) # 打开内部上拉电阻
+    p5 = Pin(5, Pin.OUT, value=1) # 初始化时候设置引脚的值为 1（高电平）
 
 Available pins are: 0, 1, 2, 3, 4, 5, 12, 13, 14, 15, 16, which correspond
 to the actual GPIO pin numbers of ESP8266 chip. Note that many end-user
