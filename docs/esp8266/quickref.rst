@@ -121,50 +121,42 @@ Use the :mod:`time <utime>` module::
     p4 = Pin(4, Pin.IN, Pin.PULL_UP) # 打开内部上拉电阻
     p5 = Pin(5, Pin.OUT, value=1) # 初始化时候设置引脚的值为 1（高电平）
 
-Available pins are: 0, 1, 2, 3, 4, 5, 12, 13, 14, 15, 16, which correspond
-to the actual GPIO pin numbers of ESP8266 chip. Note that many end-user
-boards use their own adhoc pin numbering (marked e.g. D0, D1, ...). As
-MicroPython supports different boards and modules, physical pin numbering
-was chosen as the lowest common denominator. For mapping between board
-logical pins and physical chip pins, consult your board documentation.
+以下为可用引脚: 0, 1, 2, 3, 4, 5, 12, 13, 14, 15, 16, 分别对应ESP8266芯片的实际GPIO引脚编号。
+请注意，很多用户使用自己的开发板有特定的引脚命名方式 (例如： D0, D1, ...)。由于MicroPython致力于支持
+不同的开发板和模块，因此我们采用最原始简单具且有共同特征的引脚命名方式。如果你使用自己的开发板，请参考其原理图。
 
-Note that Pin(1) and Pin(3) are REPL UART TX and RX respectively.
-Also note that Pin(16) is a special pin (used for wakeup from deepsleep
-mode) and may be not available for use with higher-level classes like
-``Neopixel``.
+请注意，引脚 Pin(1) and Pin(3) 是串口交互（REPL） UART TX 和 RX 引脚.
+同时请注意 Pin(16) 是一个特殊的引脚 (用于从深度睡眠模式中唤醒) 所以有可能不能使用高级的类模块如``Neopixel``.
 
 PWM (脉宽调制)
 ----------------------------
 
-PWM can be enabled on all pins except Pin(16).  There is a single frequency
-for all channels, with range between 1 and 1000 (measured in Hz).  The duty
-cycle is between 0 and 1023 inclusive.
+PWM 可以通过所有引脚输出除了 Pin(16).  所有通道都有1个特定的频率，从1到1000之间（单位是Hz）。占空比的值为0至1023之间。
 
 Use the ``machine.PWM`` class::
 
     from machine import Pin, PWM
 
-    pwm0 = PWM(Pin(0))      # create PWM object from a pin
-    pwm0.freq()             # get current frequency
-    pwm0.freq(1000)         # set frequency
-    pwm0.duty()             # get current duty cycle
-    pwm0.duty(200)          # set duty cycle
-    pwm0.deinit()           # turn off PWM on the pin
+    pwm0 = PWM(Pin(0))      # 从1个引脚中创建 PWM object from a pin
+    pwm0.freq()             # 获取当前频率
+    pwm0.freq(1000)         # 设置频率
+    pwm0.duty()             # 获取当前占空比
+    pwm0.duty(200)          # 设置占空比
+    pwm0.deinit()           # 关闭引脚的 PWM
 
-    pwm2 = PWM(Pin(2), freq=500, duty=512) # create and configure in one go
+    pwm2 = PWM(Pin(2), freq=500, duty=512) # 在同一语句下创建和配置 PWM
 
 ADC (模数转换)
 ----------------------------------
 
-ADC is available on a dedicated pin.
-Note that input voltages on the ADC pin must be between 0v and 1.0v.
+ADC 需要使用专用的引脚。请注意ADC引脚输入电压必须是0v 至 1.0v。
 
 Use the :ref:`machine.ADC <machine.ADC>` class::
 
     from machine import ADC
 
-    adc = ADC(0)            # create ADC object on ADC pin
-    adc.read()              # read value, 0-1024
+    adc = ADC(0)            # 在ADC引脚上创建ADC对象
+    adc.read()              # 读取测量值, 0-1024
 
 软件 SPI总线
 ----------------
