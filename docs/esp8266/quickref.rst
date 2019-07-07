@@ -9,8 +9,7 @@ ESP8266 快速参考手册
 
 The Adafruit Feather HUZZAH board (image attribution: Adafruit).
 
-Below is a quick reference for ESP8266-based boards.  If it is your first time
-working with this board please consider reading the following sections first:
+以下是快速参考内容.  如果你是第一次使用ESP8266开发板，请考虑先阅读以下章节内容:
 
 .. toctree::
    :maxdepth: 1
@@ -18,33 +17,31 @@ working with this board please consider reading the following sections first:
    general.rst
    tutorial/index.rst
 
-Installing MicroPython
+安装 MicroPython
 ----------------------
 
-See the corresponding section of tutorial: :ref:`intro`. It also includes
-a troubleshooting subsection.
+请参考教程的相应部分: :ref:`intro`. 它还包括故障排除小节.
 
-General board control
+通用控制
 ---------------------
 
-The MicroPython REPL is on UART0 (GPIO1=TX, GPIO3=RX) at baudrate 115200.
-Tab-completion is useful to find out what methods an object has.
-Paste mode (ctrl-E) is useful to paste a large slab of Python code into
-the REPL.
+MicroPython 的串口交互调试（REPL）在 UART0 (GPIO1=TX, GPIO3=RX)，波特率为：115200。
+Tab按键补全功能对于找到每个对象的使用方法非常有用。
+粘贴模式 (ctrl-E) 对需要复制比较多的python代码到REPL费用有用。
 
 The :mod:`machine` module::
 
     import machine
 
-    machine.freq()          # get the current frequency of the CPU
-    machine.freq(160000000) # set the CPU frequency to 160 MHz
+    machine.freq()          # 获取CPU当前工作频率
+    machine.freq(160000000) # 设置CPU的工作频率为 160 MHz
 
 The :mod:`esp` module::
 
     import esp
 
-    esp.osdebug(None)       # turn off vendor O/S debugging messages
-    esp.osdebug(0)          # redirect vendor O/S debugging messages to UART(0)
+    esp.osdebug(None)       # 关闭原厂 O/S 调试信息
+    esp.osdebug(0)          # 将原厂 O/S 调试信息重定向到 UART(0) 输出
 
 Networking
 ----------
@@ -81,7 +78,7 @@ A useful function for connecting to your local WiFi network is::
 Once the network is established the :mod:`socket <usocket>` module can be used
 to create and use TCP/UDP sockets as usual.
 
-Delay and timing
+延时和时间
 ----------------
 
 Use the :mod:`time <utime>` module::
@@ -94,7 +91,7 @@ Use the :mod:`time <utime>` module::
     start = time.ticks_ms() # get millisecond counter
     delta = time.ticks_diff(time.ticks_ms(), start) # compute time difference
 
-Timers
+定时器
 ------
 
 Virtual (RTOS-based) timers are supported. Use the :ref:`machine.Timer <machine.Timer>` class
@@ -108,7 +105,7 @@ with timer ID of -1::
 
 The period is in milliseconds.
 
-Pins and GPIO
+引脚和GPIO口
 -------------
 
 Use the :ref:`machine.Pin <machine.Pin>` class::
@@ -138,7 +135,7 @@ Also note that Pin(16) is a special pin (used for wakeup from deepsleep
 mode) and may be not available for use with higher-level classes like
 ``Neopixel``.
 
-PWM (pulse width modulation)
+PWM (脉宽调制)
 ----------------------------
 
 PWM can be enabled on all pins except Pin(16).  There is a single frequency
@@ -158,7 +155,7 @@ Use the ``machine.PWM`` class::
 
     pwm2 = PWM(Pin(2), freq=500, duty=512) # create and configure in one go
 
-ADC (analog to digital conversion)
+ADC (模数转换)
 ----------------------------------
 
 ADC is available on a dedicated pin.
@@ -171,7 +168,7 @@ Use the :ref:`machine.ADC <machine.ADC>` class::
     adc = ADC(0)            # create ADC object on ADC pin
     adc.read()              # read value, 0-1024
 
-Software SPI bus
+软件 SPI总线
 ----------------
 
 There are two SPI drivers. One is implemented in software (bit-banging)
@@ -201,7 +198,7 @@ class::
     spi.write_readinto(buf, buf) # write buf to MOSI and read MISO back into buf
 
 
-Hardware SPI bus
+硬件 SPI总线
 ----------------
 
 The hardware SPI is faster (up to 80Mhz), but only works on following pins:
@@ -215,7 +212,7 @@ constructor and init (as those are fixed)::
 
 (``SPI(0)`` is used for FlashROM and not available to users.)
 
-I2C bus
+I2C总线
 -------
 
 The I2C driver is implemented in software and works on all pins,
@@ -232,7 +229,7 @@ and is accessed via the :ref:`machine.I2C <machine.I2C>` class::
     buf = bytearray(10)     # create a buffer with 10 bytes
     i2c.writeto(0x3a, buf)  # write the given buffer to the slave
 
-Real time clock (RTC)
+实时时钟 (RTC)
 ---------------------
 
 See :ref:`machine.RTC <machine.RTC>` ::
@@ -243,7 +240,7 @@ See :ref:`machine.RTC <machine.RTC>` ::
     rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # set a specific date and time
     rtc.datetime() # get date and time
 
-Deep-sleep mode
+深度睡眠模式
 ---------------
 
 Connect GPIO16 to the reset pin (RST on HUZZAH).  Then the following code
@@ -265,7 +262,7 @@ can be used to sleep, wake and check the reset cause::
     # put the device to sleep
     machine.deepsleep()
 
-OneWire driver
+单总线驱动（OneWire）
 --------------
 
 The OneWire driver is implemented in software and works on all pins::
@@ -295,7 +292,7 @@ Be sure to put a 4.7k pull-up resistor on the data line.  Note that
 the ``convert_temp()`` method must be called each time you want to
 sample the temperature.
 
-NeoPixel driver
+NeoPixel 驱动
 ---------------
 
 Use the ``neopixel`` module::
@@ -314,7 +311,7 @@ For low-level driving of a NeoPixel::
     import esp
     esp.neopixel_write(pin, grb_buf, is800khz)
 
-APA102 driver
+APA102 驱动
 -------------
 
 Use the ``apa102`` module::
@@ -334,7 +331,7 @@ For low-level driving of an APA102::
     import esp
     esp.apa102_write(clock_pin, data_pin, rgbi_buf)
 
-DHT driver
+DHT 驱动
 ----------
 
 The DHT driver is implemented in software and works on all pins::
@@ -352,7 +349,7 @@ The DHT driver is implemented in software and works on all pins::
     d.temperature() # eg. 23.6 (°C)
     d.humidity()    # eg. 41.3 (% RH)
 
-WebREPL (web browser interactive prompt)
+WebREPL (Web浏览器交互提示)
 ----------------------------------------
 
 WebREPL (REPL over WebSockets, accessible via a web browser) is an
