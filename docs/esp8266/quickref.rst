@@ -27,7 +27,7 @@ The Adafruit Feather HUZZAH board (image attribution: Adafruit).
 
 MicroPython 的串口交互调试（REPL）在 UART0 (GPIO1=TX, GPIO3=RX)，波特率为：115200。
 Tab按键补全功能对于找到每个对象的使用方法非常有用。
-粘贴模式 (ctrl-E) 对需要复制比较多的python代码到REPL费用有用。
+粘贴模式 (ctrl-E) 对需要复制比较多的python代码到REPL非常有用。
 
 The :mod:`machine` module::
 
@@ -62,7 +62,7 @@ The :mod:`network` module::
     ap.active(True)         # 激活接口
     ap.config(essid='ESP-AP') # 设置AP的ESSID名称
     
-一个连接到你本地WIFI网络有用的函数::
+连接到本地WIFI网络的函数参考::
 
     def do_connect():
         import network
@@ -137,7 +137,7 @@ Use the ``machine.PWM`` class::
 
     from machine import Pin, PWM
 
-    pwm0 = PWM(Pin(0))      # 从1个引脚中创建 PWM object from a pin
+    pwm0 = PWM(Pin(0))      # 从1个引脚中创建 PWM 对象
     pwm0.freq()             # 获取当前频率
     pwm0.freq(1000)         # 设置频率
     pwm0.duty()             # 获取当前占空比
