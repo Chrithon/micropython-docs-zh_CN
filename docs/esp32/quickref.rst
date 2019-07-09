@@ -7,10 +7,9 @@ ESP32 快速参考手册
     :alt: ESP32 board
     :width: 640px
 
-The Espressif ESP32 Development Board (image attribution: Adafruit).
+ESP32开发板 (图片来源: Adafruit).
 
-Below is a quick reference for ESP32-based boards.  If it is your first time
-working with this board it may be useful to get an overview of the microcontroller:
+以下内容是ESP32开发板的快速入门内容。如果这是你第一次使用ESP32开发板，那么建议你先阅读以下两个章节熟悉一下：
 
 .. toctree::
    :maxdepth: 1
@@ -18,35 +17,33 @@ working with this board it may be useful to get an overview of the microcontroll
    general.rst
    tutorial/intro.rst
 
-Installing MicroPython
+安装MicroPython
 ----------------------
 
-See the corresponding section of tutorial: :ref:`esp32_intro`. It also includes
-a troubleshooting subsection.
+请参考教程的相应部分: :ref:`esp32_intro`. 它还包括故障排除小节。
 
-General board control
+通用控制
 ---------------------
 
-The MicroPython REPL is on UART0 (GPIO1=TX, GPIO3=RX) at baudrate 115200.
-Tab-completion is useful to find out what methods an object has.
-Paste mode (ctrl-E) is useful to paste a large slab of Python code into
-the REPL.
+MicroPython 的串口交互调试（REPL）在 UART0 (GPIO1=TX, GPIO3=RX)，波特率为：115200。 
+Tab按键补全功能对于找到每个对象的使用方法非常有用。 粘贴模式 (ctrl-E) 对需要复制比较多
+的python代码到REPL是非常有用。
 
 The :mod:`machine` module::
 
     import machine
 
-    machine.freq()          # get the current frequency of the CPU
-    machine.freq(240000000) # set the CPU frequency to 240 MHz
+    machine.freq()          # 获取CPU当前工作频率
+    machine.freq(240000000) # 设置CPU的工作频率为 240 MHz
 
 The :mod:`esp` module::
 
     import esp
 
-    esp.osdebug(None)       # turn off vendor O/S debugging messages
-    esp.osdebug(0)          # redirect vendor O/S debugging messages to UART(0)
+    esp.osdebug(None)       # 关闭原厂 O/S 调试信息
+    esp.osdebug(0)          # 将原厂 O/S 调试信息重定向到 UART(0) 输出
 
-    # low level methods to interact with flash storage
+    # 与flash交互的低级方法
     esp.flash_size()
     esp.flash_user_start()
     esp.flash_erase(sector_no)
@@ -57,13 +54,12 @@ The :mod:`esp32` module::
 
     import esp32
 
-    esp32.hall_sensor()     # read the internal hall sensor
-    esp32.raw_temperature() # read the internal temperature of the MCU, in Farenheit
-    esp32.ULP()             # access to the Ultra-Low-Power Co-processor
+    esp32.hall_sensor()     # 读取内部霍尔传感器
+    esp32.raw_temperature() # 读取内部温度传感器，在MCU上, 单位：华氏度F
+    esp32.ULP()             # 使用超低功耗协处理器（ULP）
 
-Note that the temperature sensor in the ESP32 will typically read higher than
-ambient due to the IC getting warm while it runs.  This effect can be minimised
-by reading the temperature sensor immediately after waking up from sleep.
+请注意ESP32内部温度读取数值会比实际要高，因为芯片工作时候回发热。
+从睡眠状态唤醒后立即读取温度传感器可以最大限度地减少这种影响。
 
 Networking
 ----------
@@ -72,19 +68,19 @@ The :mod:`network` module::
 
     import network
 
-    wlan = network.WLAN(network.STA_IF) # create station interface
-    wlan.active(True)       # activate the interface
-    wlan.scan()             # scan for access points
-    wlan.isconnected()      # check if the station is connected to an AP
-    wlan.connect('essid', 'password') # connect to an AP
-    wlan.config('mac')      # get the interface's MAC adddress
-    wlan.ifconfig()         # get the interface's IP/netmask/gw/DNS addresses
+    wlan = network.WLAN(network.STA_IF) # 创建 station 接口
+    wlan.active(True)       # 激活接口
+    wlan.scan()             # 扫描允许访问的SSID
+    wlan.isconnected()      # 检查创建的station是否连已经接到AP
+    wlan.connect('essid', 'password') # 连接到指定ESSID网络
+    wlan.config('mac')      # 获取接口的MAC地址
+    wlan.ifconfig()         # 获取接口的 IP/netmask(子网掩码)/gw(网关)/DNS 地址
 
-    ap = network.WLAN(network.AP_IF) # create access-point interface
-    ap.config(essid='ESP-AP') # set the ESSID of the access point
-    ap.active(True)         # activate the interface
+    ap = network.WLAN(network.AP_IF) # 创捷一个AP热点接口
+    ap.config(essid='ESP-AP') # 激活接口
+    ap.active(True)         # 设置AP的ESSID名称
 
-A useful function for connecting to your local WiFi network is::
+连接到本地WIFI网络的函数参考::
 
     def do_connect():
         import network
@@ -97,36 +93,34 @@ A useful function for connecting to your local WiFi network is::
                 pass
         print('network config:', wlan.ifconfig())
 
-Once the network is established the :mod:`socket <usocket>` module can be used
-to create and use TCP/UDP sockets as usual, and the ``urequests`` module for
-convenient HTTP requests.
+一旦网络建立成功，你就可以通过 :mod:`socket <usocket>` 模块创建和使用 TCP/UDP sockets 通讯, 
+以及通过 ``urequests``模块非常方便地发送 HTTP 请求。
 
-Delay and timing
+延时和时间
 ----------------
 
 Use the :mod:`time <utime>` module::
 
     import time
 
-    time.sleep(1)           # sleep for 1 second
-    time.sleep_ms(500)      # sleep for 500 milliseconds
-    time.sleep_us(10)       # sleep for 10 microseconds
-    start = time.ticks_ms() # get millisecond counter
-    delta = time.ticks_diff(time.ticks_ms(), start) # compute time difference
+    time.sleep(1)           # 睡眠1秒
+    time.sleep_ms(500)      # 睡眠500毫秒
+    time.sleep_us(10)       # 睡眠10微妙
+    start = time.ticks_ms() # 获取毫秒计时器开始值
+    delta = time.ticks_diff(time.ticks_ms(), start) # 计算从开始到当前时间的差值
 
-Timers
+定时器
 ------
 
-Virtual (RTOS-based) timers are supported. Use the :ref:`machine.Timer <machine.Timer>` class
-with timer ID of -1::
+支持虚拟 (基于RTOS) 定时器。使用 :ref:`machine.Timer <machine.Timer>` 类通过设置timer ID号为-1::
 
     from machine import Timer
 
     tim = Timer(-1)
-    tim.init(period=5000, mode=Timer.ONE_SHOT, callback=lambda t:print(1))
-    tim.init(period=2000, mode=Timer.PERIODIC, callback=lambda t:print(2))
+    tim.init(period=5000, mode=Timer.ONE_SHOT, callback=lambda t:print(1)) #1次
+    tim.init(period=2000, mode=Timer.PERIODIC, callback=lambda t:print(2)) #周期循环
 
-The period is in milliseconds.
+该周期的单位为毫秒(ms)
 
 .. _Pins_and_GPIO:
 
