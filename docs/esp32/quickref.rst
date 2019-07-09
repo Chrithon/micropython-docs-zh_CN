@@ -203,73 +203,61 @@ ESP32 特定的 ADC 类使用方法说明:
     该方法允许设置ADC输入的衰减量，以获取更大的电压测量范围，但是以精度为代价的。
     （配置后相同的位数表示更宽的范围）。衰减选项如下:
 
-      - ``ADC.ATTN_0DB``: 0dB 衰减, gives a maximum input voltage
-        of 1.00v - this is the default configuration
-      - ``ADC.ATTN_2_5DB``: 2.5dB attenuation, gives a maximum input voltage
-        of approximately 1.34v
-      - ``ADC.ATTN_6DB``: 6dB attenuation, gives a maximum input voltage
-        of approximately 2.00v
-      - ``ADC.ATTN_11DB``: 11dB attenuation, gives a maximum input voltage
-        of approximately 3.6v
+      - ``ADC.ATTN_0DB``: 0dB 衰减, 最大输入电压为 1.00v - 这是默认配置
+      - ``ADC.ATTN_2_5DB``: 2.5dB 衰减, 最大输入电压约为 1.34v
+      - ``ADC.ATTN_6DB``: 6dB 衰减, 最大输入电压约为 2.00v
+      - ``ADC.ATTN_11DB``: 11dB 衰减, 最大输入电压约为3v
 
 .. Warning::
-   Despite 11dB attenuation allowing for up to a 3.6v range, note that the
-   absolute maximum voltage rating for the input pins is 3.6v, and so going
-   near this boundary may be damaging to the IC!
+   尽管通过配置11dB衰减可以让测量电压到达3.6v,但由于ESP32芯片的最大允许输入电压是3.6V,
+   因此输入接近3.6V的电压可能会导致IC烧坏！
 
 .. method:: ADC.width(width)
 
-    This method allows for the setting of the number of bits to be utilised
-    and returned during ADC reads. Possible width options are:
+    该方法允许设置ADC输入的位数精度。 选项如下:
 
       - ``ADC.WIDTH_9BIT``: 9 bit data
       - ``ADC.WIDTH_10BIT``: 10 bit data
       - ``ADC.WIDTH_11BIT``: 11 bit data
-      - ``ADC.WIDTH_12BIT``: 12 bit data - this is the default configuration
+      - ``ADC.WIDTH_12BIT``: 12 bit data - 这是默认配置
 
-Software SPI bus
+软件SPI总线
 ----------------
 
-There are two SPI drivers. One is implemented in software (bit-banging)
-and works on all pins, and is accessed via the :ref:`machine.SPI <machine.SPI>`
-class::
+EPS32内部有两个SPI驱动。其中1个时通过软件实现 (bit-banging)，并允许配置到所有引脚，
+通过 :ref:`machine.SPI <machine.SPI>` 类模块配置::
 
     from machine import Pin, SPI
 
-    # construct an SPI bus on the given pins
-    # polarity is the idle state of SCK
-    # phase=0 means sample on the first edge of SCK, phase=1 means the second
+    # 在给定的引脚上创建SPI总线
+    # （极性）polarity是指 SCK 空闲时候的状态
+    # （相位）phase=0 表示SCK在第1个边沿开始取样，phase=1 表示在第2个边沿开始。    
     spi = SPI(baudrate=100000, polarity=1, phase=0, sck=Pin(0), mosi=Pin(2), miso=Pin(4))
 
-    spi.init(baudrate=200000) # set the baudrate
+    spi.init(baudrate=200000) # 设置频率
 
-    spi.read(10)            # read 10 bytes on MISO
-    spi.read(10, 0xff)      # read 10 bytes while outputing 0xff on MOSI
+    spi.read(10)            # 在MISO引脚读取10字节数据
+    spi.read(10, 0xff)      # 在MISO引脚读取10字节数据同时在MOSI输出0xff
 
-    buf = bytearray(50)     # create a buffer
-    spi.readinto(buf)       # read into the given buffer (reads 50 bytes in this case)
-    spi.readinto(buf, 0xff) # read into the given buffer and output 0xff on MOSI
+    buf = bytearray(50)     # 建立缓冲区
+    spi.readinto(buf)       # 读取数据并存放在缓冲区 (这里读取50个字节)
+    spi.readinto(buf, 0xff) # 读取数据并存放在缓冲区，同时在MOSI输出0xff
 
-    spi.write(b'12345')     # write 5 bytes on MOSI
+    spi.write(b'12345')     # 在MOSI引脚上写5字节数据
 
-    buf = bytearray(4)      # create a buffer
-    spi.write_readinto(b'1234', buf) # write to MOSI and read from MISO into the buffer
-    spi.write_readinto(buf, buf) # write buf to MOSI and read MISO back into buf
+    buf = bytearray(4)      # 建立缓冲区
+    spi.write_readinto(b'1234', buf) # 在MOSI引脚上写数据并将MISO读取数据存放到缓冲区
+    spi.write_readinto(buf, buf) # 在MOSI引脚上写缓冲区的数据并将MISO读取数据存放到缓冲区
 
 .. Warning::
-   Currently *all* of ``sck``, ``mosi`` and ``miso`` *must* be specified when
-   initialising Software SPI. 
+   目前在创建软件SPI对象时，``sck``, ``mosi`` 和 ``miso`` *所有* 的引脚 *必须* 定义。
 
-Hardware SPI bus
+硬件SPI总线
 ----------------
 
-There are two hardware SPI channels that allow faster transmission
-rates (up to 80Mhz). These may be used on any IO pins that support the
-required direction and are otherwise unused (see :ref:`Pins_and_GPIO`)
-but if they are not configured to their default pins then they need to
-pass through an extra layer of GPIO multiplexing, which can impact
-their reliability at high speeds. Hardware SPI channels are limited
-to 40MHz when used on pins other than the default ones listed below.
+有两个硬件SPI通道允许更高速率传输（到达80MHz）。 也可以配置成任意引脚，但相关引脚要
+符合输入输出的方向性，这可以参阅(see :ref:`Pins_and_GPIO`)内容。通过自定义引脚而非
+默认引脚，会降低传输速度，上限为40MHz。以下是硬件SPI总线默认引脚：
 
 =====  ===========  ============
 \      HSPI (id=1)   VSPI (id=2)
@@ -279,7 +267,7 @@ mosi   13           23
 miso   12           19
 =====  ===========  ============
 
-Hardware SPI has the same methods as Software SPI above::
+硬件SPI总线使用方法跟上面提到的软件SPI总线使用方法一样::
 
     from machine import Pin, SPI
 
@@ -287,24 +275,23 @@ Hardware SPI has the same methods as Software SPI above::
     vspi = SPI(2, baudrate=80000000, polarity=0, phase=0, bits=8, firstbit=0, sck=Pin(18), mosi=Pin(23), miso=Pin(19))
 
 
-I2C bus
+I2C总线
 -------
 
-The I2C driver is implemented in software and works on all pins,
-and is accessed via the :ref:`machine.I2C <machine.I2C>` class::
+I2C总线驱动可以通过软件配置在所有引脚上实现，详情请看:ref:`machine.I2C <machine.I2C>` 类模块::
 
     from machine import Pin, I2C
 
-    # construct an I2C bus
+    # 构建1个I2C对象
     i2c = I2C(scl=Pin(5), sda=Pin(4), freq=100000)
 
-    i2c.readfrom(0x3a, 4)   # read 4 bytes from slave device with address 0x3a
-    i2c.writeto(0x3a, '12') # write '12' to slave device with address 0x3a
+    i2c.readfrom(0x3a, 4)   # 从地址为0x3a的从机设备读取4字节数据
+    i2c.writeto(0x3a, '12') # 向地址为0x3a的从机设备写入数据"12" 
 
-    buf = bytearray(10)     # create a buffer with 10 bytes
-    i2c.writeto(0x3a, buf)  # write the given buffer to the slave
+    buf = bytearray(10)     # 创建1个10字节缓冲区
+    i2c.writeto(0x3a, buf)  # 写入缓冲区数据到从机
 
-Real time clock (RTC)
+实时时钟(RTC)
 ---------------------
 
 See :ref:`machine.RTC <machine.RTC>` ::
@@ -312,10 +299,11 @@ See :ref:`machine.RTC <machine.RTC>` ::
     from machine import RTC
 
     rtc = RTC()
-    rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # set a specific date and time
-    rtc.datetime() # get date and time
+    rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # 设置时间（年，月，日，星期，时，分，秒，微秒）
+                                                 # 其中星期使用0-6表示星期一至星期日。
+    rtc.datetime() # 获取当前日期和时间
 
-Deep-sleep mode
+深度睡眠模式
 ---------------
 
 The following code can be used to sleep, wake and check the reset cause::
