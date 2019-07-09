@@ -124,93 +124,86 @@ Use the :mod:`time <utime>` module::
 
 .. _Pins_and_GPIO:
 
-Pins and GPIO
+引脚和GPIO口
 -------------
 
-Use the :ref:`machine.Pin <machine.Pin>` class::
+使用 :ref:`machine.Pin <machine.Pin>` 模块::
 
     from machine import Pin
 
-    p0 = Pin(0, Pin.OUT)    # create output pin on GPIO0
-    p0.on()                 # set pin to "on" (high) level
-    p0.off()                # set pin to "off" (low) level
-    p0.value(1)             # set pin to on/high
+    p0 = Pin(0, Pin.OUT)    # 创建对象p0，对应GPIO0口输出
+    p0.on()                 # 设置引脚为 "on" (1)高电平
+    p0.off()                # 设置引脚为 "off" (0)低电平
+    p0.value(1)             # 设置引脚为 "on" (1)高电平
 
-    p2 = Pin(2, Pin.IN)     # create input pin on GPIO2
-    print(p2.value())       # get value, 0 or 1
+    p2 = Pin(2, Pin.IN)     # 创建对象p2，对应GPIO2口输入
+    print(p2.value())       # 获取引脚输入值, 0（低电平） 或者 1（高电平）
 
-    p4 = Pin(4, Pin.IN, Pin.PULL_UP) # enable internal pull-up resistor
-    p5 = Pin(5, Pin.OUT, value=1) # set pin high on creation
+    p4 = Pin(4, Pin.IN, Pin.PULL_UP) # 打开内部上拉电阻
+    p5 = Pin(5, Pin.OUT, value=1) # 初始化时候设置引脚的值为 1（高电平）
 
-Available Pins are from the following ranges (inclusive): 0-19, 21-23, 25-27, 32-39.
-These correspond to the actual GPIO pin numbers of ESP32 chip.  Note that many
-end-user boards use their own adhoc pin numbering (marked e.g. D0, D1, ...).
-For mapping between board logical pins and physical chip pins consult your board
-documentation.
+可以使用引脚排列如下 (包括首尾): 0-19, 21-23, 25-27, 32-39.分别对应ESP32芯片的实际
+引脚编号。 请注意，用户使用自己其它的开发板有特定的引脚命名方式（例如：DO, D1, ...）。
+由于MicroPython致力于支持 不同的开发板和模块，因此我们采用最原始简单具且有共同特征的引
+脚命名方式。如果你使用自己的开发板，请参考其原理图。
 
-Notes:
+注意:
 
-* Pins 1 and 3 are REPL UART TX and RX respectively
+* 引脚1和3分别是串口交互（REPL）的TX和RX。
 
-* Pins 6, 7, 8, 11, 16, and 17 are used for connecting the embedded flash,
-  and are not recommended for other uses
+* 引脚6, 7, 8, 11, 16, 和 17 are 连接到模块的Flash，不建议做其它用途。
 
-* Pins 34-39 are input only, and also do not have internal pull-up resistors
+* 引脚 34-39 只允许输入, 没有内部上拉电阻。
 
-* The pull value of some pins can be set to ``Pin.PULL_HOLD`` to reduce power
-  consumption during deepsleep.
+* 部分引脚的pull值可以设置为 ``Pin.PULL_HOLD`` 以降低深度睡眠时候的功耗。
 
-PWM (pulse width modulation)
+PWM (脉宽调制)
 ----------------------------
 
-PWM can be enabled on all output-enabled pins. The base frequency can
-range from 1Hz to 40MHz but there is a tradeoff; as the base frequency
-*increases* the duty resolution *decreases*. See 
+PWM 能在所有可输出引脚上实现。基频的范围可以从 1Hz 到 40MHz 但需要权衡: 随着基频的
+*增加* 占空分辨率 *下降*. 详情请参阅：
 `LED Control <https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/peripherals/ledc.html>`_
-for more details.
+.
 
 Use the ``machine.PWM`` class::
 
     from machine import Pin, PWM
 
-    pwm0 = PWM(Pin(0))      # create PWM object from a pin
-    pwm0.freq()             # get current frequency
-    pwm0.freq(1000)         # set frequency
-    pwm0.duty()             # get current duty cycle
-    pwm0.duty(200)          # set duty cycle
-    pwm0.deinit()           # turn off PWM on the pin
+    pwm0 = PWM(Pin(0))      # 从1个引脚中创建PWM对象
+    pwm0.freq()             # 获取当前频率
+    pwm0.freq(1000)         # 设置频率
+    pwm0.duty()             # 获取当前占空比
+    pwm0.duty(200)          # 设置占空比
+    pwm0.deinit()           # 关闭引脚的 PWM
 
-    pwm2 = PWM(Pin(2), freq=20000, duty=512) # create and configure in one go
+    pwm2 = PWM(Pin(2), freq=20000, duty=512) # 在同一语句下创建和配置 PWM
 
-ADC (analog to digital conversion)
+ADC (模数转换)
 ----------------------------------
 
-On the ESP32 ADC functionality is available on Pins 32-39. Note that, when
-using the default configuration, input voltages on the ADC pin must be between
-0.0v and 1.0v (anything above 1.0v will just read as 4095).  Attenuation must
-be applied in order to increase this usable voltage range.
+ADC功能在ESP32引脚32-39上可用。请注意，使用默认配置时，ADC引脚上的输入电压必须
+介于0.0v和1.0v之间（任何高于1.0v的值都将读为4095）。如果需要增加测量范围，需要配置
+衰减器。
 
 Use the :ref:`machine.ADC <machine.ADC>` class::
 
     from machine import ADC
 
-    adc = ADC(Pin(32))          # create ADC object on ADC pin
-    adc.read()                  # read value, 0-4095 across voltage range 0.0v - 1.0v
+    adc = ADC(Pin(32))          # 在ADC引脚上创建ADC对象
+    adc.read()                  # 读取测量值, 0-4095 表示电压从 0.0v - 1.0v
 
-    adc.atten(ADC.ATTN_11DB)    # set 11dB input attentuation (voltage range roughly 0.0v - 3.6v)
-    adc.width(ADC.WIDTH_9BIT)   # set 9 bit return values (returned range 0-511)
-    adc.read()                  # read value using the newly configured attenuation and width
+    adc.atten(ADC.ATTN_11DB)    # 设置 11dB 衰减输入 (测量电压大致从 0.0v - 3.6v)
+    adc.width(ADC.WIDTH_9BIT)   # 设置 9位 精度输出 (返回值 0-511)
+    adc.read()                  # 获取重新配置后的测量值
 
-ESP32 specific ADC class method reference:
+ESP32 特定的 ADC 类使用方法说明:
 
 .. method:: ADC.atten(attenuation)
 
-    This method allows for the setting of the amount of attenuation on the
-    input of the ADC. This allows for a wider possible input voltage range,
-    at the cost of accuracy (the same number of bits now represents a wider
-    range). The possible attenuation options are:
+    该方法允许设置ADC输入的衰减量，以获取更大的电压测量范围，但是以精度为代价的。
+    （配置后相同的位数表示更宽的范围）。衰减选项如下:
 
-      - ``ADC.ATTN_0DB``: 0dB attenuation, gives a maximum input voltage
+      - ``ADC.ATTN_0DB``: 0dB 衰减, gives a maximum input voltage
         of 1.00v - this is the default configuration
       - ``ADC.ATTN_2_5DB``: 2.5dB attenuation, gives a maximum input voltage
         of approximately 1.34v
