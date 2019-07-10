@@ -158,66 +158,63 @@ Use the :ref:`machine.ADC <machine.ADC>` class::
     adc = ADC(0)            # 在ADC引脚上创建ADC对象
     adc.read()              # 读取测量值, 0-1024
 
-软件 SPI总线
+软件SPI总线
 ----------------
 
-There are two SPI drivers. One is implemented in software (bit-banging)
-and works on all pins, and is accessed via the :ref:`machine.SPI <machine.SPI>`
-class::
+EPS32内部有两个SPI驱动。其中1个是通过软件实现 (bit-banging)，并允许配置到所有
+引脚， 通过 :ref:`machine.SPI <machine.SPI>` 类模块配置::
 
     from machine import Pin, SPI
 
-    # construct an SPI bus on the given pins
-    # polarity is the idle state of SCK
-    # phase=0 means sample on the first edge of SCK, phase=1 means the second
+    # 在给定的引脚上创建SPI总线
+    # polarity（极性）是指 SCK 空闲时候的状态
+    # phase=0 （相位）表示SCK在第1个边沿开始取样，phase=1 表示在第2个边沿开始。
     spi = SPI(-1, baudrate=100000, polarity=1, phase=0, sck=Pin(0), mosi=Pin(2), miso=Pin(4))
 
-    spi.init(baudrate=200000) # set the baudrate
+    spi.init(baudrate=200000) # 设置频率
 
-    spi.read(10)            # read 10 bytes on MISO
-    spi.read(10, 0xff)      # read 10 bytes while outputing 0xff on MOSI
+    spi.read(10)            # 在MISO引脚读取10字节数据
+    spi.read(10, 0xff)      # 在MISO引脚读取10字节数据同时在MOSI输出0xff
 
-    buf = bytearray(50)     # create a buffer
-    spi.readinto(buf)       # read into the given buffer (reads 50 bytes in this case)
-    spi.readinto(buf, 0xff) # read into the given buffer and output 0xff on MOSI
+    buf = bytearray(50)     # 建立缓冲区
+    spi.readinto(buf)       # 读取数据并存放在缓冲区 (这里读取50个字节)
+    spi.readinto(buf, 0xff) # 读取数据并存放在缓冲区，同时在MOSI输出0xff
 
-    spi.write(b'12345')     # write 5 bytes on MOSI
+    spi.write(b'12345')     # 在MOSI引脚上写5字节数据
 
-    buf = bytearray(4)      # create a buffer
-    spi.write_readinto(b'1234', buf) # write to MOSI and read from MISO into the buffer
-    spi.write_readinto(buf, buf) # write buf to MOSI and read MISO back into buf
+    buf = bytearray(4)      # 建立缓冲区
+    spi.write_readinto(b'1234', buf) # 在MOSI引脚上写数据并将MISO读取数据存放到缓冲区
+    spi.write_readinto(buf, buf) # 在MOSI引脚上写缓冲区的数据并将MISO读取数据存放到缓冲区
 
 
-硬件 SPI总线
+硬件SPI总线
 ----------------
 
-The hardware SPI is faster (up to 80Mhz), but only works on following pins:
-``MISO`` is GPIO12, ``MOSI`` is GPIO13, and ``SCK`` is GPIO14. It has the same
-methods as the bitbanging SPI class above, except for the pin parameters for the
-constructor and init (as those are fixed)::
+有两个硬件SPI通道允许更高速率传输（到达80MHz）。只可以运行在以下对应引脚:
+``MISO`` 是 GPIO12, ``MOSI`` 是 GPIO13, 以及 ``SCK`` 是 GPIO14. 除了引脚参数配置外，
+使用方法和上面软件SPI总线一样（因为引脚是固定的） ::
 
     from machine import Pin, SPI
 
     hspi = SPI(1, baudrate=80000000, polarity=0, phase=0)
 
-(``SPI(0)`` is used for FlashROM and not available to users.)
+(``SPI(0)`` 用在内部flash上，不对用户开放使用。)
 
 I2C总线
 -------
 
-The I2C driver is implemented in software and works on all pins,
-and is accessed via the :ref:`machine.I2C <machine.I2C>` class::
+I2C总线驱动可以通过软件配置在所有引脚上实现，详情请看:ref:`machine.I2C <machine.I2C>` 类模块::
 
     from machine import Pin, I2C
 
     # construct an I2C bus
     i2c = I2C(scl=Pin(5), sda=Pin(4), freq=100000)
 
-    i2c.readfrom(0x3a, 4)   # read 4 bytes from slave device with address 0x3a
-    i2c.writeto(0x3a, '12') # write '12' to slave device with address 0x3a
+    i2c.readfrom(0x3a, 4)   # 从地址为0x3a的从机设备读取4字节数据
+    i2c.writeto(0x3a, '12') # 向地址为0x3a的从机设备写入数据"12" 
 
-    buf = bytearray(10)     # create a buffer with 10 bytes
-    i2c.writeto(0x3a, buf)  # write the given buffer to the slave
+    buf = bytearray(10)     # 创建1个10字节缓冲区
+    i2c.writeto(0x3a, buf)  # 写入缓冲区数据到从机
 
 实时时钟 (RTC)
 ---------------------
@@ -227,8 +224,9 @@ See :ref:`machine.RTC <machine.RTC>` ::
     from machine import RTC
 
     rtc = RTC()
-    rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # set a specific date and time
-    rtc.datetime() # get date and time
+    rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # 设置时间（年，月，日，星期，时，分，秒，微秒）
+                                                 # 其中星期使用0-6表示星期一至星期日。                                                  
+    rtc.datetime() # # 获取当前日期和时间
 
 深度睡眠模式
 ---------------
