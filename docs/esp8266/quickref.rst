@@ -226,47 +226,47 @@ See :ref:`machine.RTC <machine.RTC>` ::
     rtc = RTC()
     rtc.datetime((2017, 8, 23, 1, 12, 48, 0, 0)) # 设置时间（年，月，日，星期，时，分，秒，微秒）
                                                  # 其中星期使用0-6表示星期一至星期日。                                                  
-    rtc.datetime() # # 获取当前日期和时间
+    rtc.datetime() # 获取当前日期和时间
 
 深度睡眠模式
 ---------------
 
-Connect GPIO16 to the reset pin (RST on HUZZAH).  Then the following code
-can be used to sleep, wake and check the reset cause::
+将GPIO16引脚连接到复位（HUZZAH的RST）。那么下面的代码可以用来
+睡眠、唤醒和检测复位唤醒::
 
     import machine
 
-    # configure RTC.ALARM0 to be able to wake the device
+    # 配置 RTC.ALARM0 用于定时唤醒设备
     rtc = machine.RTC()
     rtc.irq(trigger=rtc.ALARM0, wake=machine.DEEPSLEEP)
 
-    # check if the device woke from a deep sleep
+    # 检测设备是否通过深度睡眠GPIO16引脚唤醒
     if machine.reset_cause() == machine.DEEPSLEEP_RESET:
         print('woke from a deep sleep')
 
-    # set RTC.ALARM0 to fire after 10 seconds (waking the device)
+    # 设置 RTC.ALARM0 定时器时间为10秒（唤醒设备）
     rtc.alarm(rtc.ALARM0, 10000)
 
-    # put the device to sleep
+    # 让设备进入睡眠状态
     machine.deepsleep()
 
 单总线驱动（OneWire）
 --------------
 
-The OneWire driver is implemented in software and works on all pins::
+单总线驱动允许通过软件在各个引脚上实现::
 
     from machine import Pin
     import onewire
 
-    ow = onewire.OneWire(Pin(12)) # create a OneWire bus on GPIO12
-    ow.scan()               # return a list of devices on the bus
-    ow.reset()              # reset the bus
-    ow.readbyte()           # read a byte
-    ow.writebyte(0x12)      # write a byte on the bus
-    ow.write('123')         # write bytes on the bus
-    ow.select_rom(b'12345678') # select a specific device by its ROM code
+    ow = onewire.OneWire(Pin(12)) # 在引脚 GPIO12 创建单总线对象ow
+    ow.scan()               # 扫描设备
+    ow.reset()              # 复位
+    ow.readbyte()           # 读取1个字节
+    ow.writebyte(0x12)      # 写入1个字节
+    ow.write('123')         # 写入多个字节
+    ow.select_rom(b'12345678') # 根据ROM编号选择总线上的指定设备
 
-There is a specific driver for DS18S20 and DS18B20 devices::
+下面是一个DS18B20设备的驱动函数::
 
     import time, ds18x20
     ds = ds18x20.DS18X20(ow)
@@ -276,11 +276,10 @@ There is a specific driver for DS18S20 and DS18B20 devices::
     for rom in roms:
         print(ds.read_temp(rom))
 
-Be sure to put a 4.7k pull-up resistor on the data line.  Note that
-the ``convert_temp()`` method must be called each time you want to
-sample the temperature.
+确保数据引脚连接了 4.7k 的上拉电阻。另外请注意每次采集温度都需要用到
+``convert_temp()`` 模块.
 
-NeoPixel 驱动
+NeoPixel 彩灯驱动
 ---------------
 
 Use the ``neopixel`` module::
@@ -288,13 +287,13 @@ Use the ``neopixel`` module::
     from machine import Pin
     from neopixel import NeoPixel
 
-    pin = Pin(0, Pin.OUT)   # set GPIO0 to output to drive NeoPixels
-    np = NeoPixel(pin, 8)   # create NeoPixel driver on GPIO0 for 8 pixels
-    np[0] = (255, 255, 255) # set the first pixel to white
-    np.write()              # write data to all pixels
-    r, g, b = np[0]         # get first pixel colour
+    pin = Pin(0, Pin.OUT)   # 设置引脚GPIO0来驱动 NeoPixels
+    np = NeoPixel(pin, 8)   # 在GPIO0上创建一个 NeoPixel对象，包含8个灯珠
+    np[0] = (255, 255, 255) # 设置第一个灯珠显示数据为白色
+    np.write()              # 写入数据
+    r, g, b = np[0]         # 获取第一个灯珠的颜色
 
-For low-level driving of a NeoPixel::
+低级别的 NeoPixel 驱动::
 
     import esp
     esp.neopixel_write(pin, grb_buf, is800khz)
@@ -322,7 +321,7 @@ For low-level driving of an APA102::
 DHT 驱动
 ----------
 
-The DHT driver is implemented in software and works on all pins::
+DHT 温湿度驱动允许通过软件在各个引脚上实现::
 
     import dht
     import machine
@@ -340,30 +339,24 @@ The DHT driver is implemented in software and works on all pins::
 WebREPL (Web浏览器交互提示)
 ----------------------------------------
 
-WebREPL (REPL over WebSockets, accessible via a web browser) is an
-experimental feature available in ESP8266 port. Download web client
-from https://github.com/micropython/webrepl (hosted version available
-at http://micropython.org/webrepl), and configure it by executing::
+WebREPL (通过WebSockets的REPL, 可以通过浏览器使用) 是ESP8266端口实验的功能。
+可以从 https://github.com/micropython/webrepl 下载并打开html文件运行。
+(在线托管版可以通过访问 http://micropython.org/webrepl直接使用), 通过执行以下
+命令进行配置::
 
     import webrepl_setup
 
-and following on-screen instructions. After reboot, it will be available
-for connection. If you disabled automatic start-up on boot, you may
-run configured daemon on demand using::
+按照屏幕的提示操作。重启后，允许使用WebREPL。如果你禁用了开机自动启动WebREPL,可以
+通过以下命令使用::
 
     import webrepl
     webrepl.start()
 
-The supported way to use WebREPL is by connecting to ESP8266 access point,
-but the daemon is also started on STA interface if it is active, so if your
-router is set up and works correctly, you may also use WebREPL while connected
-to your normal Internet access point (use the ESP8266 AP connection method
-if you face any issues).
+这个 WebREPL 通过连接到ESP8266的AP使用,如果你的路由器配网络配置正确，这个功能
+也可以通过STA方式使用，那意味着你可以同时上网和调试ESP8266。(如果遇到不可行的特殊情况，
+请先使用ESP8266 AP方式)。
 
-Besides terminal/command prompt access, WebREPL also has provision for file
-transfer (both upload and download). Web client has buttons for the
-corresponding functions, or you can use command-line client ``webrepl_cli.py``
-from the repository above.
+除了终端/命令符的访问方式, WebREPL同时允许传输文件 (包含上传和下载)。Web客户端有相应的
+功能按钮，也可以通过 ``webrepl_cli.py``模块上存储的命令行进行操作。
 
-See the MicroPython forum for other community-supported alternatives
-to transfer files to ESP8266.
+有关将文件传输到ESP8266其他支持的替代方法，请参阅MicroPython论坛。
