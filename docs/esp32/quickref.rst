@@ -224,7 +224,7 @@ ESP32 特定的 ADC 类使用方法说明:
 软件SPI总线
 ----------------
 
-EPS32内部有两个SPI驱动。其中1个时通过软件实现 (bit-banging)，并允许配置到所有引脚，
+EPS32内部有两个SPI驱动。其中1个是通过软件实现 (bit-banging)，并允许配置到所有引脚，
 通过 :ref:`machine.SPI <machine.SPI>` 类模块配置::
 
     from machine import Pin, SPI
