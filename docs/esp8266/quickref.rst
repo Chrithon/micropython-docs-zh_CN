@@ -341,7 +341,7 @@ WebREPL (Web浏览器交互提示)
 
 WebREPL (通过WebSockets的REPL, 可以通过浏览器使用) 是ESP8266端口实验的功能。
 可以从 https://github.com/micropython/webrepl 下载并打开html文件运行。
-(在线托管版可以通过访问 http://micropython.org/webrepl直接使用), 通过执行以下
+(在线托管版可以通过访问 http://micropython.org/webrepl)直接使用, 通过执行以下
 命令进行配置::
 
     import webrepl_setup
