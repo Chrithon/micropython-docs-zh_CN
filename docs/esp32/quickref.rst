@@ -306,49 +306,46 @@ See :ref:`machine.RTC <machine.RTC>` ::
 深度睡眠模式
 ---------------
 
-The following code can be used to sleep, wake and check the reset cause::
+下面代码可以用来睡眠、唤醒和检测复位唤醒::
 
     import machine
 
-    # check if the device woke from a deep sleep
+    # 检测设备是否从深度睡眠中唤醒
     if machine.reset_cause() == machine.DEEPSLEEP_RESET:
         print('woke from a deep sleep')
 
-    # put the device to sleep for 10 seconds
+    # 使设备进入深度睡眠，时间10秒。
     machine.deepsleep(10000)
 
-Notes:
+注意事项:
 
-* Calling ``deepsleep()`` without an argument will put the device to sleep
-  indefinitely
-* A software reset does not change the reset cause
-* There may be some leakage current flowing through enabled internal pullups.
-  To further reduce power consumption it is possible to disable the internal pullups::
+* 调用深度睡眠函数 ``deepsleep()`` 如果不提供参数（时间）的话可能会让设备无限期休眠。
+* 软件复位不能触发复位事件（reset cause）。
+* 可能会出现一些泄漏电流流经内部上下拉电阻，为了进一步降低功耗，可以关闭GPIO的上下拉电阻::
 
     p1 = Pin(4, Pin.IN, Pin.PULL_HOLD)
     
-  After leaving deepsleep it may be necessary to un-hold the pin explicitly (e.g. if
-  it is an output pin) via::
+  退出深度睡眠后，有必要恢复GPIO原来的状态 (例如：原来是输出引脚) ::
     
     p1 = Pin(4, Pin.OUT, None)
 
-OneWire driver
+单总线驱动（Onewire）
 --------------
 
-The OneWire driver is implemented in software and works on all pins::
+单总线驱动允许通过软件在各个引脚上实现::
 
     from machine import Pin
     import onewire
 
-    ow = onewire.OneWire(Pin(12)) # create a OneWire bus on GPIO12
-    ow.scan()               # return a list of devices on the bus
-    ow.reset()              # reset the bus
-    ow.readbyte()           # read a byte
-    ow.writebyte(0x12)      # write a byte on the bus
-    ow.write('123')         # write bytes on the bus
-    ow.select_rom(b'12345678') # select a specific device by its ROM code
+    ow = onewire.OneWire(Pin(12)) # 在引脚 GPIO12 创建单总线对象ow
+    ow.scan()               # 扫描设备,返回设备编号列表
+    ow.reset()              # 复位总线
+    ow.readbyte()           # 读取1字节
+    ow.writebyte(0x12)      # 写入1个字节（0x12）
+    ow.write('123')         # 写入多个字节('123')
+    ow.select_rom(b'12345678') # 根据ROM编号选择总线上的指定设备
 
-There is a specific driver for DS18S20 and DS18B20 devices::
+下面是一个DS18B20设备的驱动函数::
 
     import time, ds18x20
     ds = ds18x20.DS18X20(ow)
@@ -358,11 +355,9 @@ There is a specific driver for DS18S20 and DS18B20 devices::
     for rom in roms:
         print(ds.read_temp(rom))
 
-Be sure to put a 4.7k pull-up resistor on the data line.  Note that
-the ``convert_temp()`` method must be called each time you want to
-sample the temperature.
+确保数据引脚连接了 4.7k 的上拉电阻。另外请注意每次采集温度都需要用到 ``convert_temp()``模块。
 
-NeoPixel driver
+NeoPixel 彩灯驱动
 ---------------
 
 Use the ``neopixel`` module::
@@ -370,25 +365,23 @@ Use the ``neopixel`` module::
     from machine import Pin
     from neopixel import NeoPixel
 
-    pin = Pin(0, Pin.OUT)   # set GPIO0 to output to drive NeoPixels
-    np = NeoPixel(pin, 8)   # create NeoPixel driver on GPIO0 for 8 pixels
-    np[0] = (255, 255, 255) # set the first pixel to white
-    np.write()              # write data to all pixels
-    r, g, b = np[0]         # get first pixel colour
+    pin = Pin(0, Pin.OUT)   # 设置引脚GPIO0来驱动 NeoPixels
+    np = NeoPixel(pin, 8)   # 在GPIO0上创建一个 NeoPixel对象，包含8个灯珠
+    np[0] = (255, 255, 255) # 设置第一个灯珠显示数据为白色
+    np.write()              # 写入数据
+    r, g, b = np[0]         # 获取第一个灯珠的颜色
 
-For low-level driving of a NeoPixel::
+低级别的 NeoPixel 驱动::
 
     import esp
     esp.neopixel_write(pin, grb_buf, is800khz)
 
-.. Warning::
-   By default ``NeoPixel`` is configured to control the more popular *800kHz*
-   units. It is possible to use alternative timing to control other (typically
-   400kHz) devices by passing ``timing=0`` when constructing the
-   ``NeoPixel`` object.
+.. 警告::
+   默认情况下， ``NeoPixel`` 被配置成控制更常用的 *800kHz*单元设备。用户可以通过使用替代的定时器
+   来说控制其他频率的设备 (通常是 400kHz)。 可以通过使用定时器 ``timing=0`` 当构建``NeoPixel`` 对象的时候。
 
 
-Capacitive Touch
+电容触摸
 ----------------
 
 Use the ``TouchPad`` class in the ``machine`` module::
@@ -396,35 +389,33 @@ Use the ``TouchPad`` class in the ``machine`` module::
     from machine import TouchPad, Pin
 
     t = TouchPad(Pin(14))
-    t.read()              # Returns a smaller number when touched 
+    t.read()              # 当触摸的时候返回一个很小的数字。
 
-``TouchPad.read`` returns a value relative to the capacitive variation. Small numbers (typically in
-the *tens*) are common when a pin is touched, larger numbers (above *one thousand*) when 
-no touch is present. However the values are *relative* and can vary depending on the board 
-and surrounding composition so some calibration may be required.
+``TouchPad.read`` 返回一个跟电容相关的变量数值。 当被触摸时候，这个数值很小 (通常是 *十位*)，
+而当电容按键没有被触摸时候，返回一个很大的数字 (大于*1000*)。 然而，这些值是 *相对的*，它可能会
+随外部环境变化，因此你可能需要做一些校准。
 
-There are ten capacitive touch-enabled pins that can be used on the ESP32: 0, 2, 4, 12, 13
-14, 15, 27, 32, 33. Trying to assign to any other pins will result in a ``ValueError``.
+ESP32有10个电容触摸输入IO口: 0, 2, 4, 12, 13,14, 15, 27, 32, 33。尝试其它GPIO会返回``ValueError``。
 
-Note that TouchPads can be used to wake an ESP32 from sleep::
+TouchPads可以唤醒睡眠中的ESP32::
 
     import machine
     from machine import TouchPad, Pin
     import esp32
 
     t = TouchPad(Pin(14))
-    t.config(500)               # configure the threshold at which the pin is considered touched
+    t.config(500)               # 配置触摸引脚的阈值
     esp32.wake_on_touch(True)
-    machine.lightsleep()        # put the MCU to sleep until a touchpad is touched
-
-For more details on touchpads refer to `Espressif Touch Sensor
+    machine.lightsleep()        # MCU进入睡眠状态，直到touchpad被触摸
+    
+有关 touchpads 更多资料请参考以下链接： `Espressif Touch Sensor
 <https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/peripherals/touch_pad.html>`_.
 
 
-DHT driver
+DHT 驱动
 ----------
 
-The DHT driver is implemented in software and works on all pins::
+DHT 温湿度驱动允许通过软件在各个引脚上实现::
 
     import dht
     import machine
@@ -439,34 +430,30 @@ The DHT driver is implemented in software and works on all pins::
     d.temperature() # eg. 23.6 (°C)
     d.humidity()    # eg. 41.3 (% RH)
 
-WebREPL (web browser interactive prompt)
+WebREPL (Web浏览器交互提示)
 ----------------------------------------
 
-WebREPL (REPL over WebSockets, accessible via a web browser) is an
-experimental feature available in ESP32 port. Download web client
-from https://github.com/micropython/webrepl (hosted version available
-at http://micropython.org/webrepl), and configure it by executing::
+WebREPL (通过WebSockets的REPL, 可以通过浏览器使用) 是ESP8266端口实验的功能。 
+可以从 https://github.com/micropython/webrepl 下载并打开html文件运行。 
+(在线托管版可以通过访问 http://micropython.org/webrepl)直接使用,  通过执行
+以下命令进行配置::
 
     import webrepl_setup
 
-and following on-screen instructions. After reboot, it will be available
-for connection. If you disabled automatic start-up on boot, you may
-run configured daemon on demand using::
+按照屏幕的提示操作。重启后，允许使用WebREPL。如果你禁用了开机自动启动WebREPL,
+可以通过以下命令使用::
 
     import webrepl
     webrepl.start()
 
-    # or, start with a specific password
+    # 也可在在开始时候设置一个密码
     webrepl.start(password='mypass')
 
-The WebREPL daemon listens on all active interfaces, which can be STA or
-AP.  This allows you to connect to the ESP32 via a router (the STA
-interface) or directly when connected to its access point.
+这个 WebREPL 通过连接到ESP32的AP使用,如果你的路由器配网络配置正确，这个功能
+也可以通过STA方式使用，那意味着你可以同时上网和调试ESP32。(如果遇到不可行的
+特殊情况， 请先使用ESP32 AP方式)。
 
-In addition to terminal/command prompt access, WebREPL also has provision
-for file transfer (both upload and download).  The web client has buttons for
-the corresponding functions, or you can use the command-line client
-``webrepl_cli.py`` from the repository above.
+除了终端/命令符的访问方式, WebREPL同时允许传输文件 (包含上传和下载)。Web客户端有相应的
+功能按钮，也可以通过 ``webrepl_cli.py``模块上存储的命令行进行操作。
 
-See the MicroPython forum for other community-supported alternatives
-to transfer files to an ESP32 board.
+有关将文件传输到ESP32其他支持的替代方法，请参阅MicroPython论坛。
