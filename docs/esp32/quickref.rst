@@ -25,7 +25,7 @@ ESP32开发板 (图片来源: Adafruit).
 通用控制
 ---------------------
 
-MicroPython 的串口交互调试（REPL）在 UART0 (GPIO1=TX, GPIO3=RX)，波特率为：115200。 
+MicroPython 的串口交互调试（REPL）在 UART0 (GPIO1=TX, GPIO3=RX)，波特率为：115200。
 Tab按键补全功能对于找到每个对象的使用方法非常有用。 粘贴模式 (ctrl-E) 对需要复制比较多
 的python代码到REPL是非常有用。
 
@@ -93,7 +93,7 @@ The :mod:`network` module::
                 pass
         print('network config:', wlan.ifconfig())
 
-一旦网络建立成功，你就可以通过 :mod:`socket <usocket>` 模块创建和使用 TCP/UDP sockets 通讯, 
+一旦网络建立成功，你就可以通过 :mod:`socket <usocket>` 模块创建和使用 TCP/UDP sockets 通讯,
 以及通过 ``urequests``模块非常方便地发送 HTTP 请求。
 
 延时和时间
@@ -231,7 +231,7 @@ EPS32内部有两个SPI驱动。其中1个是通过软件实现 (bit-banging)，
 
     # 在给定的引脚上创建SPI总线
     # （极性）polarity是指 SCK 空闲时候的状态
-    # （相位）phase=0 表示SCK在第1个边沿开始取样，phase=1 表示在第2个边沿开始。    
+    # （相位）phase=0 表示SCK在第1个边沿开始取样，phase=1 表示在第2个边沿开始。
     spi = SPI(baudrate=100000, polarity=1, phase=0, sck=Pin(0), mosi=Pin(2), miso=Pin(4))
 
     spi.init(baudrate=200000) # 设置频率
@@ -278,15 +278,22 @@ miso   12           19
 I2C总线
 -------
 
-I2C总线驱动可以通过软件配置在所有引脚上实现，详情请看:ref:`machine.I2C <machine.I2C>` 类模块::
+I2C总线分软件和硬件对象，硬件可以定义0和1，通过配置可以在任意引脚上实现改功能，
+详情请看:ref:`machine.I2C <machine.I2C>` 类模块::
 
     from machine import Pin, I2C
 
     # 构建1个I2C对象
     i2c = I2C(scl=Pin(5), sda=Pin(4), freq=100000)
 
+    # 构建一个硬件 I2C 总线
+    i2c = I2C(0)
+    i2c = I2C(1, scl=Pin(5), sda=Pin(4), freq=400000)
+
+    i2c.scan()              # 扫描从设备
+
     i2c.readfrom(0x3a, 4)   # 从地址为0x3a的从机设备读取4字节数据
-    i2c.writeto(0x3a, '12') # 向地址为0x3a的从机设备写入数据"12" 
+    i2c.writeto(0x3a, '12') # 向地址为0x3a的从机设备写入数据"12"
 
     buf = bytearray(10)     # 创建1个10字节缓冲区
     i2c.writeto(0x3a, buf)  # 写入缓冲区数据到从机
@@ -324,9 +331,9 @@ See :ref:`machine.RTC <machine.RTC>` ::
 * 可能会出现一些泄漏电流流经内部上下拉电阻，为了进一步降低功耗，可以关闭GPIO的上下拉电阻::
 
     p1 = Pin(4, Pin.IN, Pin.PULL_HOLD)
-    
+
   退出深度睡眠后，有必要恢复GPIO原来的状态 (例如：原来是输出引脚) ::
-    
+
     p1 = Pin(4, Pin.OUT, None)
 
 单总线驱动（Onewire）
@@ -407,7 +414,7 @@ TouchPads可以唤醒睡眠中的ESP32::
     t.config(500)               # 配置触摸引脚的阈值
     esp32.wake_on_touch(True)
     machine.lightsleep()        # MCU进入睡眠状态，直到touchpad被触摸
-    
+
 有关 touchpads 更多资料请参考以下链接： `Espressif Touch Sensor
 <https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/peripherals/touch_pad.html>`_.
 
@@ -433,8 +440,8 @@ DHT 温湿度驱动允许通过软件在各个引脚上实现::
 WebREPL (Web浏览器交互提示)
 ----------------------------------------
 
-WebREPL (通过WebSockets的REPL, 可以通过浏览器使用) 是ESP8266端口实验的功能。 
-可以从 https://github.com/micropython/webrepl 下载并打开html文件运行。 
+WebREPL (通过WebSockets的REPL, 可以通过浏览器使用) 是ESP8266端口实验的功能。
+可以从 https://github.com/micropython/webrepl 下载并打开html文件运行。
 (在线托管版可以通过访问 http://micropython.org/webrepl)直接使用,  通过执行
 以下命令进行配置::
 
