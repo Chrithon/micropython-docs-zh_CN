@@ -3,11 +3,18 @@
 ESP32 快速参考手册
 =============================
 
-.. image:: img/esp32.jpg
-    :alt: ESP32 board
-    :width: 640px
+.. only:: not latex
 
-ESP32开发板 (图片来源: Adafruit).
+   .. image:: http://www.01studio.org/micropython/picture/pyWiFi-ESP32_pinout.png
+      :alt: PYBv1.1 pinout
+      :width: 700px
+
+.. only:: latex
+
+   .. image:: http://www.01studio.org/micropython/picture/pyWiFi-ESP32_pinout.png
+      :alt: PYBv1.1 pinout
+      
+ESP32开发板 (图片来源: 01Studio).
 
 以下内容是ESP32开发板的快速入门内容。如果这是你第一次使用ESP32开发板，那么建议你先阅读以下两个章节熟悉一下：
 
