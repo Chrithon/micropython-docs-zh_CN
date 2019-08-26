@@ -5,13 +5,15 @@ ESP8266 快速参考手册
 .. only:: not latex
 
    .. image:: http://www.01studio.org/micropython/picture/pyWiFi-ESP8266_pinout.png
-      :alt: PYBv1.1 pinout
+      :alt: pyWiFi-ESP8266 pinout
       :width: 700px
 
 .. only:: latex
 
    .. image:: http://www.01studio.org/micropython/picture/pyWiFi-ESP8266_pinout.png
-      :alt: PYBv1.1 pinout
+      :alt: pyWiFi-ESP8266 pinout
+
+ESP8266开发板（图片来源：01Studio）
 
 以下是快速参考内容.  如果你是第一次使用ESP8266开发板，请考虑先阅读以下章节内容:
 
