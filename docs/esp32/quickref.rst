@@ -6,13 +6,13 @@ ESP32 快速参考手册
 .. only:: not latex
 
    .. image:: http://www.01studio.org/micropython/picture/pyWiFi-ESP32_pinout.png
-      :alt: PYBv1.1 pinout
+      :alt: pyWiFi-ESP32 pinout
       :width: 700px
 
 .. only:: latex
 
    .. image:: http://www.01studio.org/micropython/picture/pyWiFi-ESP32_pinout.png
-      :alt: PYBv1.1 pinout
+      :alt: pyWiFi-ESP32 pinout
       
 ESP32开发板 (图片来源: 01Studio).
 
