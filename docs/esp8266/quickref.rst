@@ -2,12 +2,16 @@
 
 ESP8266 快速参考手册
 ===============================
+.. only:: not latex
 
-.. image:: img/adafruit_products_pinoutstop.jpg
-    :alt: Adafruit Feather HUZZAH board
-    :width: 640px
+   .. image:: http://www.01studio.org/micropython/picture/pyWiFi-ESP8266_pinout.png
+      :alt: PYBv1.1 pinout
+      :width: 700px
 
-The Adafruit Feather HUZZAH board (image attribution: Adafruit).
+.. only:: latex
+
+   .. image:: http://www.01studio.org/micropython/picture/pyWiFi-ESP8266_pinout.png
+      :alt: PYBv1.1 pinout
 
 以下是快速参考内容.  如果你是第一次使用ESP8266开发板，请考虑先阅读以下章节内容:
 
