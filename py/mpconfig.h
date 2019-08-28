@@ -1079,6 +1079,11 @@ typedef double mp_float_t;
 #define MICROPY_PY_MATH_FACTORIAL (0)
 #endif
 
+// Whether to provide math.isclose function
+#ifndef MICROPY_PY_MATH_ISCLOSE
+#define MICROPY_PY_MATH_ISCLOSE (0)
+#endif
+
 // Whether to provide "cmath" module
 #ifndef MICROPY_PY_CMATH
 #define MICROPY_PY_CMATH (0)
@@ -1252,6 +1257,10 @@ typedef double mp_float_t;
 
 #ifndef MICROPY_PY_URE
 #define MICROPY_PY_URE (0)
+#endif
+
+#ifndef MICROPY_PY_URE_DEBUG
+#define MICROPY_PY_URE_DEBUG (0)
 #endif
 
 #ifndef MICROPY_PY_URE_MATCH_GROUPS
@@ -1520,6 +1529,15 @@ typedef double mp_float_t;
 // Condition is likely to be false, to help branch prediction
 #ifndef MP_UNLIKELY
 #define MP_UNLIKELY(x) __builtin_expect((x), 0)
+#endif
+
+// To annotate that code is unreachable
+#ifndef MP_UNREACHABLE
+#if defined(__GNUC__)
+#define MP_UNREACHABLE __builtin_unreachable();
+#else
+#define MP_UNREACHABLE for (;;);
+#endif
 #endif
 
 #ifndef MP_HTOBE16
