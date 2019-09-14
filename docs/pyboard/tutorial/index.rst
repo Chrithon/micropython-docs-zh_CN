@@ -1,6 +1,6 @@
 .. _pyboard_tutorial:
 
-MicroPython针对pyboard的教程
+Micro-Python针对pyboard的教程
 ====================================
 
 This tutorial is intended to get you started with your pyboard.
