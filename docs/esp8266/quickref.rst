@@ -234,7 +234,15 @@ See :ref:`machine.RTC <machine.RTC>` ::
                                                  # 其中星期使用0-6表示星期一至星期日。                                                  
     rtc.datetime() # 获取当前日期和时间
 
+    # synchronize with ntp
+    # need to be connected to wifi
+    import ntptime
+    ntptime.settime() # set the rtc datetime from the remote server
+    rtc.datetime()    # get the date and time in UTC
+
+
 深度睡眠模式
+
 ---------------
 
 将GPIO16引脚连接到复位（HUZZAH的RST）。那么下面的代码可以用来
