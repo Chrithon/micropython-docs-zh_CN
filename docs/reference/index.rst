@@ -1,4 +1,4 @@
-The MicroPython language
+MicroPython 语言
 ========================
 
 MicroPython aims to implement the Python 3.4 standard (with selected
